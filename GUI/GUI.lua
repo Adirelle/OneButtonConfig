@@ -1,14 +1,18 @@
 local OneButtonConfig = OneButtonConfig
 
 local toggleInfo = {
-	text = 'Enable',
+	text = 'Enable config mode',
 	checked = function() return OneButtonConfig:GetState() end,
 	func = function() OneButtonConfig:Toggle() end,
 	keepShownOnClick = true,
 }
+
+local toggleIcon
+
 local subMenuInfo = {
 	hasArrow = true
 }
+
 local modeInfo = {
 	keepShownOnClick = true,
 	func = function(button, name, mode)
@@ -20,6 +24,9 @@ local modeInfo = {
 local function initialize(frame, level)
 	if level == 1 then		
 		UIDropDownMenu_AddButton(toggleInfo, level)
+		if toggleIcon then
+			UIDropDownMenu_AddButton(toggleIcon, level)
+		end
 		for name, values in pairs(OneButtonConfig.modes) do
 			if type(values) == 'table' then
 				subMenuInfo.text = name
@@ -70,3 +77,29 @@ dataobj.OnClick = function(frame, button)
 	end
 end
 
+local iconDB = {}
+
+OneButtonConfigFrame:HookScript('OnEvent', function(_, event, name)
+	if event == 'ADDON_LOADED' and name:lower() == "onebuttonconfig" then
+		local LibDBIcon = LibStub('LibDBIcon-1.0')
+		local ICON_NAME = "OneButtonConfig"
+		if not OneButtonConfigDB.icon then
+			OneButtonConfigDB.icon = {}
+		end
+		local iconDB = OneButtonConfigDB.icon
+		LibDBIcon:Register(ICON_NAME, dataobj, iconDB)
+		toggleIcon = {
+			text = 'Show minimap icon',
+			checked = function() return not iconDB.hide end,
+			func = function() 
+				iconDB.hide = not iconDB.hide
+				if iconDB.hide then
+					LibDBIcon:Hide(ICON_NAME)
+				else
+					LibDBIcon:Show(ICON_NAME)
+				end
+			end,
+			keepShownOnClick = true,
+		}
+	end
+end)
