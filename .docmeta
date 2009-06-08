@@ -1,3 +1,4 @@
-type: creole
-input-files: "docs/*.creole"
-output-directory: Guides
+-
+  type: creole
+  input-files: "docs/*.creole"
+  output-directory: Docs
