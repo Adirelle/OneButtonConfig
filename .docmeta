@@ -1,4 +1,9 @@
 -
   type: creole
-  input-files: "docs/*.creole"
-  output-directory: Docs
+  input-file: docs/Specification.creole
+  output-page: "Specification"
+
+-
+  type: creole
+  input-file: docs/Tutorial.creole
+  output-page: "How to support OneButtonConfig in your addon"
