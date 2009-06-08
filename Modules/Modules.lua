@@ -10,13 +10,6 @@ If the addon is not yet loaded but could be loaded later, a listener
 is set up to wait until the addon is loaded.
 ]]
 
---@debug@
-local debug = print
---@end-debug@
---[=[@non-debug@
-local debug = function() end
---@end-non-debug@]=]
-
 local loadableModules
 local function RegisterModule(names, callback, key)
 	if type(names) ~= "table" then
@@ -25,7 +18,6 @@ local function RegisterModule(names, callback, key)
 	key = key or names[1]
 	local safe_callback = function()
 		if CONFIGMODE_CALLBACKS[key] then return debug("CONFIGMODE_CALLBACKS["..key.."] already exists") end
-		debug("Registering homemade",key,"handler")
 		local res, msg = pcall(callback)
 		if not res then
 			geterrorhandler()(msg)
@@ -33,7 +25,6 @@ local function RegisterModule(names, callback, key)
 	end
 	for _,name in pairs(names) do
 		if IsAddOnLoaded(name) then
-			debug(name, "already loaded, registering now")
 			return safe_callback()
 		end
 	end
