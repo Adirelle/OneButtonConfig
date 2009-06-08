@@ -43,9 +43,8 @@ local function ScanModes()
 	end
 end
 
-OneButtonConfig:SetScript('OnEvent', function(self, event, ...)
-	self:UnregisterEvent('VARIABLES_LOADED')
-	self:RegisterEvent('ADDON_LOADED')
+OneButtonConfig:SetScript('OnEvent', function(self, event, name)
+	if name:lower() ~= "onebuttonconfig" then return end
 	self:RegisterEvent('PLAYER_REGEN_DISABLED')
 	self:RegisterEvent('PLAYER_REGEN_ENABLED')
 
@@ -70,8 +69,8 @@ OneButtonConfig:SetScript('OnEvent', function(self, event, ...)
 	ScanModes()
 end)
 
--- Initialize on VARIABLES_LOADED')
-OneButtonConfig:RegisterEvent('VARIABLES_LOADED')
+-- Initialize on ADDON_LOADED
+OneButtonConfig:RegisterEvent('ADDON_LOADED')
 
 -- Core function
 function OneButtonConfig:SetState(v)

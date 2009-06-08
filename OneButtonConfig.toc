@@ -1,2 +1,6 @@
-## Interface: 30000## Title: One Button Config## Notes: Toggle addon configuration mode.## Author: Adirelle## Version: @project-version@ ## X-Date: @project-date-iso@## X-License: GPL v2 or later## SavedVariables: OneButtonConfigDBCore.luaGUI\libs\LibStub.luaGUI\libs\CallbackHandler-1.0.luaGUI\libs\LibDataBroker-1.1.luaGUI\GUI.luaModules\Modules.lua
+## Interface: 30000## Title: One Button Config## Notes: Toggle addon configuration mode.## Author: Adirelle## Version: @project-version@ ## X-Date: @project-date-iso@## X-License: GPL v2 or later## SavedVariables: OneButtonConfigDB
+## LoadManagers: AddonLoader
+## X-LoadOn-Slash: /obc, /onebuttonconfig
+## X-LoadOn-LDB-Launcher: Interface\Icons\INV_Gizmo_01
+Core.luaGUI\libs\LibStub.luaGUI\libs\CallbackHandler-1.0.luaGUI\libs\LibDataBroker-1.1.luaGUI\GUI.luaModules\Modules.lua
 

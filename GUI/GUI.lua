@@ -59,13 +59,14 @@ local function OpenMenu(anchor)
 	ToggleDropDownMenu(1, nil, dropdown, anchor)
 end
 
-LibStub('LibDataBroker-1.1'):NewDataObject('OneButtonConfig', {
-  type = 'launcher',
-  OnClick = function(frame, button)
-		if button == "RightButton" then
-			OpenMenu(frame)
-		else
-			OneButtonConfig:Toggle()
-		end
+local LDB = LibStub('LibDataBroker-1.1')
+local dataobj = LDB:GetDataObjectByName('OneButtonConfig') or LDB:NewDataObject('OneButtonConfig', { type = 'launcher',  icon = [[Interface\Icons\INV_Gizmo_01]] })
+dataobj.OnTooltipShow = nil
+dataobj.OnClick = function(frame, button)
+	if button == "RightButton" then
+		OpenMenu(frame)
+	else
+		OneButtonConfig:Toggle()
 	end
-})
+end
+
