@@ -1,0 +1,18 @@
+package-as: OneButtonConfig
+
+externals:
+  GUI/libs/LibStub: 
+    url: svn://svn.wowace.com/wow/libstub/mainline/trunk
+    tag: latest
+  GUI/libs/CallbackHandler-1.0: 
+    url: svn://svn.wowace.com/wow/callbackhandler/mainline/trunk/CallbackHandler-1.0
+    tag: latest
+  GUI/libs/LibDataBroker-1.1:
+    url: git://github.com/tekkub/libdatabroker-1-1.git
+    tag: latest
+  GUI/libs/LibDBIcon-1.1:
+    url: svn://svn.wowace.com/wow/libdbicon-1-0/mainline/trunk/LibDBIcon-1.1
+    tag: latest
+
+ignore:
+  - docs
