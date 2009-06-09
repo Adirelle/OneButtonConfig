@@ -77,29 +77,36 @@ dataobj.OnClick = function(frame, button)
 	end
 end
 
-local iconDB = {}
-
-OneButtonConfigFrame:HookScript('OnEvent', function(_, event, name)
-	if event == 'ADDON_LOADED' and name:lower() == "onebuttonconfig" then
-		local LibDBIcon = LibStub('LibDBIcon-1.0')
-		local ICON_NAME = "OneButtonConfig"
-		if not OneButtonConfigDB.icon then
-			OneButtonConfigDB.icon = {}
-		end
-		local iconDB = OneButtonConfigDB.icon
-		LibDBIcon:Register(ICON_NAME, dataobj, iconDB)
-		toggleIcon = {
-			text = 'Show minimap icon',
-			checked = function() return not iconDB.hide end,
-			func = function() 
-				iconDB.hide = not iconDB.hide
-				if iconDB.hide then
-					LibDBIcon:Hide(ICON_NAME)
-				else
-					LibDBIcon:Show(ICON_NAME)
-				end
-			end,
-			keepShownOnClick = true,
-		}
+local function InitializeMinimapIcon()
+	local LibDBIcon = LibStub('LibDBIcon-1.0')
+	local ICON_NAME = "OneButtonConfig"
+	if not OneButtonConfigDB.icon then
+		OneButtonConfigDB.icon = {}
 	end
-end)
+	local iconDB = OneButtonConfigDB.icon
+	LibDBIcon:Register(ICON_NAME, dataobj, iconDB)
+	toggleIcon = {
+		text = 'Show minimap icon',
+		checked = function() return not iconDB.hide end,
+		func = function() 
+			iconDB.hide = not iconDB.hide
+			if iconDB.hide then
+				LibDBIcon:Hide(ICON_NAME)
+			else
+				LibDBIcon:Show(ICON_NAME)
+			end
+		end,
+		keepShownOnClick = true,
+	}
+	InitializeIconDB = nil
+end
+
+if IsLoggedIn() then
+	InitializeMinimapIcon()
+else
+	OneButtonConfigFrame:HookScript('OnEvent', function(_, event, name)
+		if event == 'ADDON_LOADED' and name:lower() == "onebuttonconfig" then
+			InitializeMinimapIcon()
+		end
+	end)
+end
