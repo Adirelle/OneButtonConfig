@@ -253,7 +253,7 @@ RegisterModule('Omen', function()
 	function CONFIGMODE_CALLBACKS.Omen(action)
 		if not opts then
 			if not Omen.Options then
-				Omen.GenerateOptionsInternal()
+				Omen.GenerateOptions()
 			end
 			opts = Omen.Options.args.General.args
 		end
