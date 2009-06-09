@@ -79,6 +79,36 @@ function OneButtonConfig:ADDON_LOADED(_, name)
 	end
 end
 
+function OneButtonConfig:CreateLoadingHandler(name, ...)
+	local modes = { ... }
+	CONFIGMODE_CALLBACKS[name] = function(action, mode)
+		if action == "ON" then
+			CONFIGMODE_CALLBACKS[name] = nil
+			if LoadAddOn(name) then
+				if type(CONFIGMODE_CALLBACKS[name]) == "function" then
+					return CONFIGMODE_CALLBACKS[name](action, mode)
+				end
+			end
+		elseif action == "GETMODES" then
+			return unpack(modes)
+		end
+	end
+end
+
+-- Register LoD handlers
+for index = 1, GetNumAddOns() do
+	if not IsAddOnLoaded(index) then
+		local name, _, _, enabled, loadable, _, _ = GetAddOnInfo(index)
+		local header = GetAddOnMetadata(name, "X-ConfigMode")
+		if enabled and loadable and header and not CONFIGMODE_CALLBACKS[name] then			
+			if header:match(",") then
+				OneButtonConfig:CreateLoadingHandler(name, header:gmatch("[^ ,]+"))
+			else
+				OneButtonConfig:CreateLoadingHandler(name)
+			end
+		end
+	end
+end
 
 -- Core function
 function OneButtonConfig:SetState(v)

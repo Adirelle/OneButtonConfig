@@ -11,10 +11,9 @@ is set up to wait until the addon is loaded.
 ]]
 
 local loadableModules
-local function RegisterModule(name, callback, key)
-	key = key or name
+local function RegisterModule(name, callback)
 	local safe_callback = function()
-		if CONFIGMODE_CALLBACKS[key] then return end
+		if CONFIGMODE_CALLBACKS[name] then return end
 		local res, msg = pcall(callback)
 		if not res then
 			geterrorhandler()(msg)
@@ -27,15 +26,7 @@ local function RegisterModule(name, callback, key)
 	if exists and enabled and loadable then
 		if not loadableModules then loadableModules = {} end
 		loadableModules[name:lower()] = safe_callback
-		CONFIGMODE_CALLBACKS[key] = function(action, ...)
-			if action == "ON" then
-				CONFIGMODE_CALLBACKS[key] = nil
-				LoadAddOn(name)
-				if type(CONFIGMODE_CALLBACKS[key]) == "function" then
-					return CONFIGMODE_CALLBACKS[key](action, ...)
-				end
-			end
-		end
+		OneButtonConfig:CreateLoadingHandler(name)
 	end
 end
 
