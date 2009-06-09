@@ -273,9 +273,7 @@ end)
 
 --- If there a modules to load, do what need be
 if loadableModules then
-	local frame = CreateFrame("Frame")
-	frame:RegisterEvent('ADDON_LOADED')
-	frame:SetScript('OnEvent', function(self, event, addon)
+	hooksecurefunc(OneButtonConfig, "ADDON_LOADED", function(self, event, addon)
 		addon = addon:lower()
 		local callback = loadableModules[addon]
 		if callback then
@@ -287,4 +285,5 @@ if loadableModules then
 			callback()
 		end
 	end)
+	OneButtonConfig:RegisterEvent('ADDON_LOADED')
 end

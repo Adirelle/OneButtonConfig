@@ -1,3 +1,5 @@
+if not OneButtonConfig then return end
+
 local OneButtonConfig = OneButtonConfig
 
 local toggleInfo = {
@@ -21,7 +23,7 @@ local modeInfo = {
 	end,
 }
 
-local function initialize(frame, level)
+local function InitializeDropDownMenu(frame, level)
 	if level == 1 then		
 		UIDropDownMenu_AddButton(toggleInfo, level)
 		if toggleIcon then
@@ -61,7 +63,7 @@ local function OpenMenu(anchor)
 		dropdown = CreateFrame("Frame", "OneButtonConfigDropDown", UIParent, "UIDropDownMenuTemplate")
 		dropdown.xOffset, dropdown.yOffset = 0, 0
 	end	
-	UIDropDownMenu_Initialize(dropdown, initialize, "MENU", nil)	
+	UIDropDownMenu_Initialize(dropdown, InitializeDropDownMenu, "MENU", nil)	
 	dropdown.point, dropdown.relativePoint = GetAnchor(anchor)
 	ToggleDropDownMenu(1, nil, dropdown, anchor)
 end
@@ -101,12 +103,4 @@ local function InitializeMinimapIcon()
 	InitializeIconDB = nil
 end
 
-if IsLoggedIn() then
-	InitializeMinimapIcon()
-else
-	OneButtonConfigFrame:HookScript('OnEvent', function(_, event, name)
-		if event == 'ADDON_LOADED' and name:lower() == "onebuttonconfig" then
-			InitializeMinimapIcon()
-		end
-	end)
-end
+hooksecurefunc(OneButtonConfig, "Initialize", InitializeMinimapIcon)
