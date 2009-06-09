@@ -11,11 +11,8 @@ is set up to wait until the addon is loaded.
 ]]
 
 local loadableModules
-local function RegisterModule(names, callback, key)
-	if type(names) ~= "table" then
-		names = { names }
-	end
-	key = key or names[1]
+local function RegisterModule(name, callback, key)
+	key = key or name
 	local safe_callback = function()
 		if CONFIGMODE_CALLBACKS[key] then return end
 		local res, msg = pcall(callback)
@@ -23,16 +20,21 @@ local function RegisterModule(names, callback, key)
 			geterrorhandler()(msg)
 		end
 	end
-	for _,name in pairs(names) do
-		if IsAddOnLoaded(name) then
-			return safe_callback()
-		end
+	if IsAddOnLoaded(name) then
+		return safe_callback()
 	end
-	for _,name in pairs(names) do
-		local realName, _, _, enabled, loadable = GetAddOnInfo(name)
-		if realName and enabled and loadable then
-			if not loadableModules then loadableModules = {} end
-			loadableModules[name:lower()] = safe_callback
+	local exists, _, _, enabled, loadable = GetAddOnInfo(name)
+	if exists and enabled and loadable then
+		if not loadableModules then loadableModules = {} end
+		loadableModules[name:lower()] = safe_callback
+		CONFIGMODE_CALLBACKS[key] = function(action, ...)
+			if action == "ON" then
+				CONFIGMODE_CALLBACKS[key] = nil
+				LoadAddOn(name)
+				if type(CONFIGMODE_CALLBACKS[key]) == "function" then
+					return CONFIGMODE_CALLBACKS[key](action, ...)
+				end
+			end
 		end
 	end
 end
@@ -45,9 +47,7 @@ RegisterModule('ag_UnitFrames', function()
 		if action == 'GETMODES' then
 			return 'party', 'raid'
 		end
-		if not IsAddOnLoaded('ag_Options') then
-			LoadAddOn('ag_Options')
-		end
+		LoadAddOn('ag_Options')
 		if not aUF.UpdateSetupMode then
 			return
 		end
@@ -156,8 +156,12 @@ RegisterModule("BigWigs", function()
 	end
 	local toggledMessages
 	function CONFIGMODE_CALLBACKS.BigWigs(action)
-		if action ~= 'ON' and action ~= 'OFF' then return end
+		if action ~= 'ON' and action ~= 'OFF' then return end		
 		local show = (action == "ON")
+		if show then
+			LoadAddOn('BigWigs_Extras')
+			LoadAddOn('BigWigs_Plugins')
+		end
 		local plugin = getModule('Messages')
 		if plugin then 
 			if show then
@@ -277,11 +281,7 @@ if loadableModules then
 		addon = addon:lower()
 		local callback = loadableModules[addon]
 		if callback then
-			for name,func in pairs(loadableModules) do
-				if func == callback then
-					loadableModules[name] = nil
-				end
-			end
+			loadableModules[addon] = nil
 			callback()
 		end
 	end)
