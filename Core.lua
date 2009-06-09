@@ -59,21 +59,26 @@ function OneButtonConfig:PLAYER_REGEN_DISABLED()
 	end
 end
 
+function OneButtonConfig:PLAYER_LOGOUT()
+	self:SetState(false)
+end
+
 function OneButtonConfig:Initialize()
 	self:RegisterEvent('PLAYER_REGEN_DISABLED')
 	self:RegisterEvent('PLAYER_REGEN_ENABLED')
+	self:RegisterEvent('PLAYER_LOGOUT')
 	OneButtonConfigDB = OneButtonConfigDB or {}
 	OneButtonConfigDB.modes = OneButtonConfigDB.modes or {}
 	ScanModes()
 end
 
+OneButtonConfig:RegisterEvent('ADDON_LOADED')
 function OneButtonConfig:ADDON_LOADED(_, name)
 	if name:lower() == "onebuttonconfig" then
 		self:Initialize()
 	end
 end
 
-OneButtonConfig:RegisterEvent('ADDON_LOADED')
 
 -- Core function
 function OneButtonConfig:SetState(v)
