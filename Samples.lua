@@ -17,7 +17,7 @@ local function RegisterModule(names, callback, key)
 	end
 	key = key or names[1]
 	local safe_callback = function()
-		if CONFIGMODE_CALLBACKS[key] then return debug("CONFIGMODE_CALLBACKS["..key.."] already exists") end
+		if CONFIGMODE_CALLBACKS[key] then return end
 		local res, msg = pcall(callback)
 		if not res then
 			geterrorhandler()(msg)
@@ -31,7 +31,6 @@ local function RegisterModule(names, callback, key)
 	for _,name in pairs(names) do
 		local realName, _, _, enabled, loadable = GetAddOnInfo(name)
 		if realName and enabled and loadable then
-			debug("Postpone", name, "registering")
 			if not loadableModules then loadableModules = {} end
 			loadableModules[name:lower()] = safe_callback
 		end
