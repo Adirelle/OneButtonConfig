@@ -1,6 +1,6 @@
 
 local chatWindowWasLocked = {}
-function CONFIGMODE_CALLBACKS.BlizzardChatWindows(action)
+CONFIGMODE_CALLBACKS["Blizzard - Chat Windows"] = function(action)
 	if action == "ON" then
 		wipe(chatWindowWasLocked)
 		for index = 1, NUM_CHAT_WINDOWS do
@@ -18,7 +18,7 @@ function CONFIGMODE_CALLBACKS.BlizzardChatWindows(action)
 end
 
 local focusFrameWasLocked
-function CONFIGMODE_CALLBACKS.BlizzardFocusFrame(action)
+CONFIGMODE_CALLBACKS["Blizzard - Focus Frame"] = function(action)
 	if action == "ON" then
 		focusFrameWasLocked = FocusFrame_IsLocked()
 		if focusFrameWasLocked then
@@ -31,7 +31,7 @@ function CONFIGMODE_CALLBACKS.BlizzardFocusFrame(action)
 end
 
 local watchFrameWasLocked
-function CONFIGMODE_CALLBACKS.BlizzardWatchFrame(action)
+CONFIGMODE_CALLBACKS["Blizzard - Watch Frame"] = function(action)
 	if action == "ON" then
 		watchFrameWasLocked = WatchFrame.locked
 		if watchFrameWasLocked then
