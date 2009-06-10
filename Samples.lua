@@ -11,22 +11,16 @@ is set up to wait until the addon is loaded.
 ]]
 
 local loadableModules
+local SafeCall = OneButtonConfig.SafeCall
 local function RegisterModule(name, callback)
-	local safe_callback = function()
-		if CONFIGMODE_CALLBACKS[name] then return end
-		local res, msg = pcall(callback)
-		if not res then
-			geterrorhandler()(msg)
-		end
-	end
 	if IsAddOnLoaded(name) then
-		return safe_callback()
+		return SafeCall(callback)
 	end
-	local exists, _, _, enabled, loadable = GetAddOnInfo(name)
-	if exists and enabled and loadable then
+	local realName, title, _, enabled, loadable = GetAddOnInfo(name)
+	if realName and enabled and loadable then
 		if not loadableModules then loadableModules = {} end
-		loadableModules[name:lower()] = safe_callback
-		OneButtonConfig:CreateLoadingHandler(name)
+		loadableModules[realName] = { name, callback }
+		OneButtonConfig:RegisterLoD(name, title)
 	end
 end
 
@@ -44,7 +38,11 @@ RegisterModule('ag_UnitFrames', function()
 		end
 		if action == 'ON' then
 			backup = aUF.db.profile.Locked
-			aUF:UpdateSetupMode(mode)
+			if mode == "raid" then
+				aUF:UpdateSetupMode("raid")
+			else
+				aUF:UpdateSetupMode("party")
+			end
 			aUF.db.profile.Locked = false
 		elseif action == 'OFF' then
 			aUF:UpdateSetupMode('off')
@@ -222,7 +220,7 @@ RegisterModule('Gladius', function()
 			savedLocked = Gladius.db.profile.locked
 			Gladius.db.profile.locked = false
 			
-			local bracket = tonumber(mode:sub(1,1))
+			local bracket = tonumber(tostring(mode):sub(1,1)) or 5
 			if bracket ~= Gladius.currentBracket then
 				Gladius:ToggleFrame(bracket)
 			else
@@ -269,12 +267,13 @@ end)
 --- If there a modules to load, do what need be
 if loadableModules then
 	hooksecurefunc(OneButtonConfig, "ADDON_LOADED", function(self, event, addon)
-		addon = addon:lower()
-		local callback = loadableModules[addon]
-		if callback then
-			loadableModules[addon] = nil
-			callback()
+		local data = loadableModules[addon]
+		loadableModules[addon] = nil
+		if data then
+			local name, callback = unpack(data)
+			if not CONFIGMODE_CALLBACKS[name] then
+				SafeCall(callback)
+			end
 		end
 	end)
-	OneButtonConfig:RegisterEvent('ADDON_LOADED')
 end
