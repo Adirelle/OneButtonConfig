@@ -19,5 +19,3 @@ libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 
 Core.lua
 GUI.lua
-Samples.lua
-Blizzard.lua

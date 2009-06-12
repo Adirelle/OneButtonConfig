@@ -4,7 +4,7 @@ OneButtonConfig = CreateFrame("Frame", "OneButtonConfigFrame")
 CONFIGMODE_CALLBACKS = CONFIGMODE_CALLBACKS or {}
 
 local OneButtonConfig = OneButtonConfig
-local state
+local state = false
 local lodRegistry = {}
 local modeCache = {}
 
