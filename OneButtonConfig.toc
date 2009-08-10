@@ -1,4 +1,4 @@
-## Interface: 30100
+## Interface: 30200
 
 ## Title: One Button Config
 ## Notes: Toggle addon configuration mode.
