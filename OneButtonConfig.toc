@@ -1,6 +1,6 @@
 ## Interface: 30300
 
-## Title: One Button Config
+## Title: OneButtonConfig
 ## Notes: Toggle addon configuration mode.
 ## Author: Adirelle
 ## Version: @project-version@ 
@@ -13,9 +13,11 @@
 #@no-lib-strip@
 libs\LibStub\LibStub.lua
 libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
-libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
 #@end-no-lib-strip@
 libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
+#@no-lib-strip@
+libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
+#@end-no-lib-strip@
 
 Core.lua
 GUI.lua
