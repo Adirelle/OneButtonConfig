@@ -11,12 +11,12 @@
 ## X-LoadOn-Always: delayed
 
 #@no-lib-strip@
-libs\LibStub\LibStub.lua
-libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
+#libs\LibStub\LibStub.lua
+#libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 #@end-no-lib-strip@
 libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 #@no-lib-strip@
-libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
+#libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
 #@end-no-lib-strip@
 
 Core.lua
